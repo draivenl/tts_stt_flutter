@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-// ignore: unused_import
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:pub_dev_library/model/sentence.dart';
+import 'package:pub_dev_library/widgets/recognized.dart';
+
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter_tts/flutter_tts.dart';
 
-void main() => runApp(MyApp());
+import 'package:provider/provider.dart';
 
-class MyApp extends StatefulWidget {
+class TTSWidget extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _TTSWidgetState createState() => _TTSWidgetState();
 }
 
 enum TtsState { playing, stopped, paused, continued }
 
-class _MyAppState extends State<MyApp> {
+class _TTSWidgetState extends State<TTSWidget> {
   FlutterTts flutterTts;
   dynamic languages;
   String language;
@@ -113,14 +114,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future _speak() async {
+    String textRecognized = context.read<Sentence>().text;
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
-    print("SPEAK");
-    if (_newVoiceText != null) {
-      if (_newVoiceText.isNotEmpty) {
+
+    if (textRecognized != null) {
+      if (textRecognized.isNotEmpty) {
         await flutterTts.awaitSpeakCompletion(true);
-        await flutterTts.speak(_newVoiceText);
+        await flutterTts.speak(textRecognized);
       }
     }
   }
@@ -170,67 +172,48 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text('Flutter TTS'),
-            ),
-            body: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(children: [
-                  _inputSection(),
-                  _btnSection(),
-                  languages != null ? _languageDropDownSection() : Text(""),
-                  _buildSliders()
-                ]))));
+    return Column(children: [
+      Recogniezed(),
+      _btnSection(),
+      languages != null ? _languageDropDownSection() : Text(""),
+      _buildSliders()
+    ]);
   }
-
-  Widget _inputSection() => Container(
-      alignment: Alignment.topCenter,
-      padding: EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
-      child: TextField(
-        onChanged: (String value) {
-          _onChange(value);
-        },
-      ));
 
   Widget _btnSection() {
     if (isAndroid) {
       return Container(
-          padding: EdgeInsets.only(top: 50.0),
+          // padding: EdgeInsets.only(top: 50.0),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            _buildButtonColumn(Colors.green, Colors.greenAccent,
-                Icons.play_arrow, 'PLAY', _speak),
-            _buildButtonColumn(
-                Colors.red, Colors.redAccent, Icons.stop, 'STOP', _stop),
-          ]));
+        _buildButtonColumn(
+            Colors.green, Colors.greenAccent, Icons.play_arrow, 'PLAY', _speak),
+        _buildButtonColumn(
+            Colors.red, Colors.redAccent, Icons.stop, 'STOP', _stop),
+      ]));
     } else {
       return Container(
-          padding: EdgeInsets.only(top: 50.0),
+          // padding: EdgeInsets.only(top: 50.0),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            _buildButtonColumn(Colors.green, Colors.greenAccent,
-                Icons.play_arrow, 'PLAY', _speak),
-            _buildButtonColumn(
-                Colors.red, Colors.redAccent, Icons.stop, 'STOP', _stop),
-            _buildButtonColumn(
-                Colors.blue, Colors.blueAccent, Icons.pause, 'PAUSE', _pause),
-          ]));
+        _buildButtonColumn(
+            Colors.green, Colors.greenAccent, Icons.play_arrow, 'PLAY', _speak),
+        _buildButtonColumn(
+            Colors.red, Colors.redAccent, Icons.stop, 'STOP', _stop),
+        _buildButtonColumn(
+            Colors.blue, Colors.blueAccent, Icons.pause, 'PAUSE', _pause),
+      ]));
     }
   }
 
   Widget _languageDropDownSection() => Container(
-      padding: EdgeInsets.only(top: 50.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          // padding: EdgeInsets.only(top: 50.0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text("Language: "),
         DropdownButton(
           value: language,
           items: getLanguageDropDownMenuItems(),
           onChanged: changedLanguageDropDownItem,
-        ),
-        Visibility(
-          visible: isAndroid,
-          child: Text("Is installed: $isCurrentLanguageInstalled"),
         ),
       ]));
 
