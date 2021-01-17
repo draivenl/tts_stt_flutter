@@ -26,8 +26,6 @@ class _TTSWidgetState extends State<TTSWidget> {
   double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
 
-  String _newVoiceText;
-
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -161,12 +159,6 @@ class _TTSWidgetState extends State<TTSWidget> {
             .isLanguageInstalled(language)
             .then((value) => isCurrentLanguageInstalled = (value as bool));
       }
-    });
-  }
-
-  void _onChange(String text) {
-    setState(() {
-      _newVoiceText = text;
     });
   }
 

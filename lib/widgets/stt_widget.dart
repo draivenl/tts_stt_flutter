@@ -165,19 +165,11 @@ class _STTWidgetState extends State<STTWidget> {
   }
 
   void statusListener(String status) {
-    // print(
-    // 'Received listener status: $status, listening: ${speech.isListening}');
     setState(() {
       lastStatus = '$status';
     });
   }
 
-  // void _switchLang(selectedVal) {
-  //   setState(() {
-  //     _currentLocaleId = selectedVal;
-  //   });
-  //   print(selectedVal);
-  // }
   Widget _content() {
     return Container(
         child: Column(children: <Widget>[
