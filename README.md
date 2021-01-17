@@ -25,6 +25,36 @@ y correr el comando
 flutter pub get
 ```
 
+## Configuaración para android
+
+Para utilizar las librerías para trabajo con voz en android, se deben modificar 1 archivos:
+
+1. en el archivo android/app/build.gradle se debe modificar la version mínima de SDK para la número
+
+```dart
+minSdkVersion 21
+```
+
+2. En el archivo android/src/main/AndroidManifest.xml se deben agregar los permisos para utilizar el micrófono y permisos de internet. Se copian las siguientes etiquetas antes de la etiqueta application
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+
+<application ...
+```
+
+## Configuaración para ios
+
+Se deben agregar los permisos para utilizar el micrófono en el archivo ios/Runner/Info.plist
+
+```xml
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Used to Speech Recognition </string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to Speech Recognition</string>
+```
+
 ## [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
 
 Se utilizar para generar un splash o pantalla inicial cuando carga la aplicación. Los splash son muy utilizado para agregar el logo de la empresa o de la aplicación y no ingresar inmediatamente al home.

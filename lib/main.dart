@@ -43,7 +43,14 @@ class MyApp extends StatelessWidget {
 /**
  * Tomado del README.md
  * 
- ## Instalación
+# pub_dev_library
+
+Proyecto para reconocimiento de voz y traducción de texto a voz.
+
+Se utilizaron 3 librerias: flutter_native_splash, flutter_tts y speech_to_text.
+Adicionalmente también se utilizó Privider
+
+## Instalación
 
 Todas las dependencias deben estar en el archivo pubspec.yaml
 
@@ -61,6 +68,36 @@ y correr el comando
 
 ```dart
 flutter pub get
+```
+
+## Configuaración para android
+
+Para utilizar las librerías para trabajo con voz en android, se deben modificar 1 archivos:
+
+1. en el archivo android/app/build.gradle se debe modificar la version mínima de SDK para la número
+
+```dart
+minSdkVersion 21
+```
+
+2. En el archivo android/src/main/AndroidManifest.xml se deben agregar los permisos para utilizar el micrófono y permisos de internet. Se copian las siguientes etiquetas antes de la etiqueta application
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+
+<application ...
+```
+
+## Configuaración para ios
+
+Se deben agregar los permisos para utilizar el micrófono en el archivo ios/Runner/Info.plist
+
+```xml
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Used to Speech Recognition </string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to Speech Recognition</string>
 ```
 
 ## [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
@@ -159,4 +196,5 @@ Para parar o pauser se utilizan los siguientes métodos
 flutterTts.stop();
 flutterTts.pause();
 ```
+
  */
